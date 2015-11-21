@@ -71,6 +71,24 @@ public class Emitter {
     }
 
     /**
+     * Add {@code callback} to the end of the list for the specified {@code event}s.
+     * <p/>
+     * As in {@link Emitter#addListener(String, Callback)} (String, Callback)}, no checks are made to see if
+     * {@code callback} has already been added.
+     * <p/>
+     * <i>This method is not thread safe and should not be invoked from other trheads.</i>
+     *
+     * @param events   The events to add the callback to.
+     * @param callback The callback to be added as listener to all the events.
+     * @return This {@code Emitter} so the calls can be chained.
+     * @deprecated Use {@link Emitter#on(String[], Callback)} instead.
+     */
+    @Deprecated
+    public Emitter addListener(String[] events, Callback callback) {
+        return on(events, callback);
+    }
+
+    /**
      * <i>This method is called internally by {@link Loop} and should not be called by a client of the library
      * .</i>
      * <p/>
@@ -171,8 +189,26 @@ public class Emitter {
     }
 
     /**
+     * Add {@code callback} to the end of the list for the specified {@code event}s.
+     * <p/>
+     * As in {@link Emitter#on(String, Callback)}, no checks are made to see if {@code callback} has already been added.
+     * <p/>
+     * <i>This method is not thread safe and should not be invoked from other trheads.</i>
+     *
+     * @param events   The events to add the callback to.
+     * @param callback The callback to be added as listener to all the events.
+     * @return This {@code Emitter} so the calls can be chained.
+     */
+    public Emitter on(String[] events, Callback callback) {
+        for (String event : events)
+            on(event, callback);
+
+        return this;
+    }
+
+    /**
      * Add a <i>one-time</i> callback to the end of the list for the specified {@code event}. The {@code callback} is
-     * invoked only nex time the event is fired, after which is removed from the list.
+     * invoked only next time the event is fired, after which is removed from the list.
      * <p/>
      * No checks are made to see if {@code callback} has already been added: multiple calls with the same combination
      * of {@code event} and {@code callback} will result with the {@code callback} added multiple times.
@@ -193,6 +229,26 @@ public class Emitter {
                 off(event, this);
             }
         });
+    }
+
+    /**
+     * Add a <i>one-time</i> callback to the end of the lists for the specified {@code events}. The {@code callback} is
+     * invoked only next time the event is fired, after which is removed from the list.
+     * <p/>
+     * As in {@link Emitter#once(String, Callback)} no checks are made to see if {@code callback} has already been
+     * added.
+     * <p/>
+     * <i>This method is not thread safe and should not be invoked from other threads.</i>
+     *
+     * @param events   The event to add the callback to.
+     * @param callback The callback added as listener to the event.
+     * @return This {@code Emitter} so the calls can be chained.
+     */
+    public Emitter once(String[] events, Callback callback) {
+        for (String event : events)
+            once(event, callback);
+
+        return this;
     }
 
     /**
