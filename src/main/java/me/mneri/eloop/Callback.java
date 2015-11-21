@@ -25,5 +25,10 @@ package me.mneri.eloop;
  * @version 1.0
  */
 public interface Callback {
+    /**
+     * The code to run when the event occurs.
+     *
+     * @param data The data passed by the event.
+     */
     void run(Object data);
 }
