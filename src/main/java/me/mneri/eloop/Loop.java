@@ -24,7 +24,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * An {@code Loop} is an active class that enqueues and dispatches events. The loop runs in the so called event
  * loop thread.
  * <p/>
- * This class is strictly coupled with {@link EventEmitter}. Emitters expose events and collect callbacks. When an
+ * This class is strictly coupled with {@link Emitter}. Emitters expose events and collect callbacks. When an
  * event is fired it is delivered to {@code Loop}. {@code Loop} takes care that callbacks are always
  * executed on the event loop thread.
  *
@@ -34,10 +34,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 public abstract class Loop {
     static class Event {
         public final Object data;
-        public final EventEmitter emitter;
+        public final Emitter emitter;
         public final String name;
 
-        Event(EventEmitter emitter, String name, Object data) {
+        Event(Emitter emitter, String name, Object data) {
             this.emitter = emitter;
             this.name = name;
             this.data = data;
@@ -48,12 +48,12 @@ public abstract class Loop {
     private volatile boolean mRunning; // true if the loop is running.
 
     /**
-     * <i>This method is called internally by {@link EventEmitter} and should not be called by a client of the library
+     * <i>This method is called internally by {@link Emitter} and should not be called by a client of the library
      * in any way.</i>
      * <p/>
      * Enqueue an event in the event queue. The event will be eventually processed and its callback executed.
      * <p/>
-     * <i>This method is thread safe. It is called internally by {@link EventEmitter} and probably executed on a
+     * <i>This method is thread safe. It is called internally by {@link Emitter} and probably executed on a
      * background thread.</i>
      *
      * @param event The event to enqueue in the event queue.
@@ -75,7 +75,7 @@ public abstract class Loop {
 
     /**
      * When a {@code Loop} is started, the run method is called in the event loop thread. The client can fire
-     * events using an {@link EventEmitter} instance.
+     * events using an {@link Emitter} instance.
      */
     protected abstract void run();
 

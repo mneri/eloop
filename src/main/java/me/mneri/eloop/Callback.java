@@ -18,7 +18,7 @@
 package me.mneri.eloop;
 
 /**
- * Implementations to this interface are passed to {@code EventEmitter} allowing code to be executed in response to
+ * Implementations to this interface are passed to {@code Emitter} allowing code to be executed in response to
  * events. {@code Callback}s are always executed on the event loop thread.
  *
  * @author Massimo Neri
