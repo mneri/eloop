@@ -46,7 +46,7 @@ public class EventEmitter {
      * @param loop The {@link EventLoop} to bind to.
      */
     public EventEmitter(EventLoop loop) {
-        // It is not possible for a EventEmitter not to be bounded to an EventLoop.
+        // It is not possible for a EventEmitter not to be bound to an EventLoop.
         if (loop == null)
             throw new NullPointerException("The event emitter should be bound to an actual event loop.");
 
