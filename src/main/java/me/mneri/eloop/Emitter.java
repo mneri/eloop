@@ -17,7 +17,7 @@
 
 package me.mneri.eloop;
 
-import static me.mneri.eloop.EventLoop.Event;
+import static me.mneri.eloop.Loop.Event;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,28 +25,28 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * An {@code EventEmitter} is an object that fires events. Clients can register callbacks to events.
+ * An {@code Emitter} is an object that fires events. Clients can register callbacks to events.
  * <p/>
- * An {@code EventEmitter} is bounded to an instance of {@link @EventLoop}. The {@link EventLoop} process the events
- * fired by multiple {@code EventEmitter}s, one at a time. The callbacks registered to an {@code EventEmitter} are
+ * An {@code Emitter} is bounded to an instance of {@link @Loop}. The {@link Loop} process the events
+ * fired by multiple {@code Emitter}s, one at a time. The callbacks registered to an {@code Emitter} are
  * guaranteed to execute on the event loop thread.
  * <p/>
- * The API of {@code EventLoop} is finely tailored with the API of {@link EventEmitter}.
+ * The API of {@code Loop} is finely tailored with the API of {@link Emitter}.
  *
  * @author Massimo Neri
  * @version 1.0
  */
-public class EventEmitter {
+public class Emitter {
     private HashMap<String, List<Callback>> mCallbacks = new HashMap<>(); // Event-callback mapping.
-    private EventLoop mLoop; // The event loop bounded to this instance.
+    private Loop mLoop; // The event loop bounded to this instance.
 
     /**
-     * Create a new {@code EventEmitter} instance bounded to the specified {@link EventLoop}.
+     * Create a new {@code Emitter} instance bounded to the specified {@link Loop}.
      *
-     * @param loop The {@link EventLoop} to bind to.
+     * @param loop The {@link Loop} to bind to.
      */
-    public EventEmitter(EventLoop loop) {
-        // It is not possible for a EventEmitter not to be bound to an EventLoop.
+    public Emitter(Loop loop) {
+        // It is not possible for a Emitter not to be bound to an Loop.
         if (loop == null)
             throw new NullPointerException("The event emitter should be bound to an actual event loop.");
 
@@ -62,16 +62,16 @@ public class EventEmitter {
      *
      * @param event    The event to add the callback to.
      * @param callback The callback to be added as listener to the event.
-     * @return This {@code EventEmitter} so the calls can be chained.
-     * @deprecated Use {@link EventEmitter#on(String, Callback)} instead.
+     * @return This {@code Emitter} so the calls can be chained.
+     * @deprecated Use {@link Emitter#on(String, Callback)} instead.
      */
     @Deprecated
-    public EventEmitter addListener(String event, Callback callback) {
+    public Emitter addListener(String event, Callback callback) {
         return on(event, callback);
     }
 
     /**
-     * <i>This method is called internally by {@link EventLoop} and should not be called by a client of the library
+     * <i>This method is called internally by {@link Loop} and should not be called by a client of the library
      * .</i>
      * <p/>
      * Dispatch an event to the callbacks that previously registered.
@@ -97,7 +97,7 @@ public class EventEmitter {
     /**
      * Call each of the callback supplied for {@code event} in order with {@code data} as argument.
      * <p/>
-     * If a callback has been added multiple times with {@link EventEmitter#on(String, Callback)}, then it will be
+     * If a callback has been added multiple times with {@link Emitter#on(String, Callback)}, then it will be
      * invoked multiple times.
      * <p/>
      * <i>This method is thread-safe and can be called from background threads.</i>
@@ -120,9 +120,9 @@ public class EventEmitter {
      *
      * @param event    The event to remove the callback from.
      * @param callback The callback to be removed.
-     * @return This {@code EventEmitter} so calls can be chained.
+     * @return This {@code Emitter} so calls can be chained.
      */
-    public EventEmitter off(String event, Callback callback) {
+    public Emitter off(String event, Callback callback) {
         // Get the list of callbacks registered for the event.
         List<Callback> list = mCallbacks.get(event);
 
@@ -153,9 +153,9 @@ public class EventEmitter {
      *
      * @param event    The event to add the callback to.
      * @param callback The callback to be added as listener to the event.
-     * @return This {@code EventEmitter} so the calls can be chained.
+     * @return This {@code Emitter} so the calls can be chained.
      */
-    public EventEmitter on(String event, Callback callback) {
+    public Emitter on(String event, Callback callback) {
         // Get the list of callbacks registered for the event.
         List<Callback> list = mCallbacks.get(event);
 
@@ -181,9 +181,9 @@ public class EventEmitter {
      *
      * @param event    The event to add the callback to.
      * @param callback The callback added as listener to the event.
-     * @return This {@code EventEmitter} so the calls can be chained.
+     * @return This {@code Emitter} so the calls can be chained.
      */
-    public EventEmitter once(final String event, final Callback callback) {
+    public Emitter once(final String event, final Callback callback) {
         // Wrap the callback in another callback. The wrapping callback takes care to remove itself after it gets
         // invoked for the first time.
         return on(event, new Callback() {
@@ -206,11 +206,11 @@ public class EventEmitter {
      *
      * @param event    The event to remove the callback from.
      * @param callback The callback to be removed.
-     * @return This {@code EventEmitter} so calls can be chained.
-     * @deprecated Use {@link EventEmitter#off(String, Callback)} instead.
+     * @return This {@code Emitter} so calls can be chained.
+     * @deprecated Use {@link Emitter#off(String, Callback)} instead.
      */
     @Deprecated
-    public EventEmitter removeListener(String event, Callback callback) {
+    public Emitter removeListener(String event, Callback callback) {
         return off(event, callback);
     }
 }

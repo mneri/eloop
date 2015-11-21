@@ -21,17 +21,17 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * An {@code EventLoop} is an active class that enqueues and dispatches events. The loop runs in the so called event
+ * An {@code Loop} is an active class that enqueues and dispatches events. The loop runs in the so called event
  * loop thread.
  * <p/>
  * This class is strictly coupled with {@link EventEmitter}. Emitters expose events and collect callbacks. When an
- * event is fired it is delivered to {@code EventLoop}. {@code EventLoop} takes care that callbacks are always
+ * event is fired it is delivered to {@code Loop}. {@code Loop} takes care that callbacks are always
  * executed on the event loop thread.
  *
  * @author Massimo Neri
  * @version 1.0
  */
-public abstract class EventLoop {
+public abstract class Loop {
     static class Event {
         public final Object data;
         public final EventEmitter emitter;
@@ -74,13 +74,13 @@ public abstract class EventLoop {
     }
 
     /**
-     * When a {@code EventLoop} is started, the run method is called in the event loop thread. The client can fire
+     * When a {@code Loop} is started, the run method is called in the event loop thread. The client can fire
      * events using an {@link EventEmitter} instance.
      */
     protected abstract void run();
 
     /**
-     * Start the event loop. Upon starting the method {@link EventLoop#run()} is invoked and executed on the event
+     * Start the event loop. Upon starting the method {@link Loop#run()} is invoked and executed on the event
      * loop thread.
      */
     public void start() {
@@ -94,14 +94,14 @@ public abstract class EventLoop {
                 while (mRunning) {
                     try {
                         // The event queue is thread safe. Usually, events are put in the queue by background threads
-                        // (through the method {@link EventLoop#enqueue} and taken by this thread, the event loop
+                        // (through the method {@link Loop#enqueue} and taken by this thread, the event loop
                         // thread.
                         Event event = mEventQueue.take();
                         // Dispatch the event to the emitter. Since the call to this method is made by the event loop
                         // thread, all the code executed in the callback runs on the event loop thread.
                         event.emitter.dispatch(event.name, event.data);
                     } catch (InterruptedException ignored) {
-                        // We should ignore this exception since we want {@link EventLoop#quit()} be the only way to
+                        // We should ignore this exception since we want {@link Loop#quit()} be the only way to
                         // stop and event loop.
                     }
                 }
