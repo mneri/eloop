@@ -46,6 +46,28 @@ public abstract class Loop {
 
     private BlockingQueue<Event> mEventQueue = new LinkedBlockingQueue<>(); // The queue of events.
     private volatile boolean mRunning; // true if the loop is running.
+    private Thread mThread = new Thread(new Runnable() { // This is the event loop thread.
+        @Override
+        public void run() {
+            mRunning = true;
+            Loop.this.run();
+
+            while (mRunning) {
+                try {
+                    // The event queue is thread safe. Usually, events are put in the queue by background threads
+                    // (through the method {@link Loop#enqueue} and taken by this thread, the event loop
+                    // thread.
+                    Event event = mEventQueue.take();
+                    // Dispatch the event to the emitter. Since the call to this method is made by the event loop
+                    // thread, all the code executed in the callback runs on the event loop thread.
+                    event.emitter.dispatch(event.name, event.data);
+                } catch (InterruptedException ignored) {
+                    // We should ignore this exception since we want {@link Loop#quit()} be the only way to
+                    // stop and event loop.
+                }
+            }
+        }
+    });
 
     /**
      * <i>This method is called internally by {@link Emitter} and should not be called by a client of the library
@@ -62,6 +84,15 @@ public abstract class Loop {
         // The event queue is thread safe: multiple threads can add and retrieve its elements. Usually, events are
         // put in the queue by background threads and are taken by the event loop thread.
         mEventQueue.add(event);
+    }
+
+    /**
+     * Return {@code true} if the current thread of execution is the event loop thread.
+     *
+     * @return {@code true} if the current execution thread is the event loop thread, {@code false} otherwise.
+     */
+    boolean isEventLoopThread(Thread thread) {
+        return mThread == thread;
     }
 
     /**
@@ -84,28 +115,6 @@ public abstract class Loop {
      * loop thread.
      */
     public void start() {
-        // This is the event loop thread.
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mRunning = true;
-                run();
-
-                while (mRunning) {
-                    try {
-                        // The event queue is thread safe. Usually, events are put in the queue by background threads
-                        // (through the method {@link Loop#enqueue} and taken by this thread, the event loop
-                        // thread.
-                        Event event = mEventQueue.take();
-                        // Dispatch the event to the emitter. Since the call to this method is made by the event loop
-                        // thread, all the code executed in the callback runs on the event loop thread.
-                        event.emitter.dispatch(event.name, event.data);
-                    } catch (InterruptedException ignored) {
-                        // We should ignore this exception since we want {@link Loop#quit()} be the only way to
-                        // stop and event loop.
-                    }
-                }
-            }
-        }).start();
+        mThread.start();
     }
 }

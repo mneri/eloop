@@ -67,6 +67,9 @@ public class Emitter {
      */
     @Deprecated
     public Emitter addListener(String event, Callback callback) {
+        if (!isEventLoopThread())
+            throw new NotOnEventLoopThreadException("addListener(String, Callback)");
+
         return on(event, callback);
     }
 
@@ -85,6 +88,9 @@ public class Emitter {
      */
     @Deprecated
     public Emitter addListener(String[] events, Callback callback) {
+        if (!isEventLoopThread())
+            throw new NotOnEventLoopThreadException("addListener(String[], Callback)");
+
         return on(events, callback);
     }
 
@@ -128,6 +134,15 @@ public class Emitter {
     }
 
     /**
+     * Return {@code true} if the current thread of execution is the event loop thread.
+     *
+     * @return {@code true} if the current execution thread is the event loop thread, {@code false} otherwise.
+     */
+    private boolean isEventLoopThread() {
+        return mLoop.isEventLoopThread(Thread.currentThread());
+    }
+
+    /**
      * Remove the specified callback from the list for the specified event.
      * <p/>
      * This method will remove at most one occurrence of the listener from the list for {@code event}. If a specific
@@ -141,6 +156,9 @@ public class Emitter {
      * @return This {@code Emitter} so calls can be chained.
      */
     public Emitter off(String event, Callback callback) {
+        if (!isEventLoopThread())
+            throw new NotOnEventLoopThreadException("off(String, Callback)");
+
         // Get the list of callbacks registered for the event.
         List<Callback> list = mCallbacks.get(event);
 
@@ -174,6 +192,9 @@ public class Emitter {
      * @return This {@code Emitter} so the calls can be chained.
      */
     public Emitter on(String event, Callback callback) {
+        if (!isEventLoopThread())
+            throw new NotOnEventLoopThreadException("on(String, Callback)");
+
         // Get the list of callbacks registered for the event.
         List<Callback> list = mCallbacks.get(event);
 
@@ -200,6 +221,9 @@ public class Emitter {
      * @return This {@code Emitter} so the calls can be chained.
      */
     public Emitter on(String[] events, Callback callback) {
+        if (!isEventLoopThread())
+            throw new NotOnEventLoopThreadException("on(String[], Callback)");
+
         for (String event : events)
             on(event, callback);
 
@@ -220,6 +244,9 @@ public class Emitter {
      * @return This {@code Emitter} so the calls can be chained.
      */
     public Emitter once(final String event, final Callback callback) {
+        if (!isEventLoopThread())
+            throw new NotOnEventLoopThreadException("once(String, Callback)");
+
         // Wrap the callback in another callback. The wrapping callback takes care to remove itself after it gets
         // invoked for the first time.
         return on(event, new Callback() {
@@ -245,6 +272,9 @@ public class Emitter {
      * @return This {@code Emitter} so the calls can be chained.
      */
     public Emitter once(String[] events, Callback callback) {
+        if (!isEventLoopThread())
+            throw new NotOnEventLoopThreadException("once(String[], Callback)");
+
         for (String event : events)
             once(event, callback);
 
@@ -267,6 +297,9 @@ public class Emitter {
      */
     @Deprecated
     public Emitter removeListener(String event, Callback callback) {
+        if (!isEventLoopThread())
+            throw new NotOnEventLoopThreadException("removeListener(String, Callback)");
+
         return off(event, callback);
     }
 }
