@@ -32,7 +32,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @version 1.0
  */
 public abstract class Loop {
-    static class Event {
+    static final class Event {
         public final Object data;
         public final Emitter emitter;
         public final String name;
@@ -44,9 +44,9 @@ public abstract class Loop {
         }
     }
 
-    private BlockingQueue<Event> mEventQueue = new LinkedBlockingQueue<>(); // The queue of events.
+    private final BlockingQueue<Event> mEventQueue = new LinkedBlockingQueue<>(); // The queue of events.
     private volatile boolean mRunning; // true if the loop is running.
-    private Thread mThread = new Thread(new Runnable() { // This is the event loop thread.
+    private final Thread mThread = new Thread(new Runnable() { // This is the event loop thread.
         @Override
         public void run() {
             Loop.this.run();
