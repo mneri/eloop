@@ -49,7 +49,6 @@ public abstract class Loop {
     private Thread mThread = new Thread(new Runnable() { // This is the event loop thread.
         @Override
         public void run() {
-            mRunning = true;
             Loop.this.run();
 
             while (mRunning) {
@@ -115,6 +114,7 @@ public abstract class Loop {
      * loop thread.
      */
     public void start() {
+        mRunning = true;
         mThread.start();
     }
 }
