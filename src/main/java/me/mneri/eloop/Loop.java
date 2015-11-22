@@ -31,6 +31,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author Massimo Neri
  * @version 1.0
  */
+@SuppressWarnings("unused")
 public abstract class Loop {
     static final class Event {
         public final Object data;

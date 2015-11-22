@@ -36,6 +36,7 @@ import java.util.List;
  * @author Massimo Neri
  * @version 1.0
  */
+@SuppressWarnings("unused")
 public class Emitter {
     private HashMap<String, List<Callback>> mCallbacks = new HashMap<>(); // Event-callback mapping.
     private Loop mLoop; // The event loop bounded to this instance.

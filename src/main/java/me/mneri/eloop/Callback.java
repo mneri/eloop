@@ -24,6 +24,7 @@ package me.mneri.eloop;
  * @author Massimo Neri
  * @version 1.0
  */
+@SuppressWarnings("unused")
 public interface Callback {
     /**
      * The code to run when the event occurs.
