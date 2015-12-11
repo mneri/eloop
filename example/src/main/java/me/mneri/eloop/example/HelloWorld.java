@@ -39,9 +39,9 @@ public class HelloWorld extends Loop {
 
     @Override
     protected void run() {
-        // This method is invoked on loop startup and runs on the event loop thread.
+        // This method is invoked on loop's startup and runs on the event loop thread.
 
-        // Get a new Emitter instance. You can emit and add callbacks to events using an emitter instance.
+        // Get a new Emitter instance. You can emit events and add callbacks to events using an emitter instance.
         Emitter emitter = emitter();
 
         // Register a Callback to the 'greet' event. When the emitter emits the 'greet' event, the callback is run.
@@ -61,7 +61,7 @@ public class HelloWorld extends Loop {
         // Register a Callback to the 'leave' event. When the emitter emits the 'greet' event, the callback is run.
         emitter.on("leave", (String who) -> {
             // The following code is guaranteed to run on the event loop thread.
-            System.out.println(String.format("Goodbye, %s", who));
+            System.out.println(String.format("Goodbye, %s!", who));
             quit(); // Stop the event loop thread.
         });
 
