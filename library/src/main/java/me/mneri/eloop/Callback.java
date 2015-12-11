@@ -21,6 +21,9 @@ package me.mneri.eloop;
  * Implementations to this interface are passed to {@code Emitter} allowing code to be executed in response to
  * events. {@code Callback}s are always executed on the event loop thread.
  *
+ * @param <T> The type of the {@code Callback} determines the type of the parameter passed to the
+ *            {@link Callback#run} method.
+ *
  * @author Massimo Neri
  * @version 1.0
  */
