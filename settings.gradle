@@ -1,2 +1,4 @@
-rootProject.name = 'me.mneri.eventloop'
+rootProject.name = 'me.mneri.eloop'
+
+include 'library', 'example'
 

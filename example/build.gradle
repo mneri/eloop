@@ -1,0 +1,17 @@
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+dependencies {
+    compile project(':library')
+}
+
+jar {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+
+    manifest {
+        attributes "Main-Class": "me.mneri.eloop.example.HelloWorld"
+    }
+}
