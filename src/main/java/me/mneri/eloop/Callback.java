@@ -24,12 +24,11 @@ package me.mneri.eloop;
  * @author Massimo Neri
  * @version 1.0
  */
-@SuppressWarnings("unused")
-public interface Callback {
+public interface Callback<T> {
     /**
      * The code to run when the event occurs.
      *
      * @param data The data passed by the event.
      */
-    void run(Object data);
+    void run(T data);
 }
