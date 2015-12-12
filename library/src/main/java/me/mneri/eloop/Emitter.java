@@ -119,12 +119,12 @@ public class Emitter {
         if (list != null) {
             try {
                 // Invoke each callback with the specified data parameter. There is an unchecked conversion from raw
-                // type Callback to type Callback<T> but that's good since the client of the library is requested to
-                // give the same type for emit() and on() (or once()) methods.
+                // type Callback to type Callback<T> but that's good since the client is requested to give the same type
+                // for emit() and on() (or once()) methods.
                 for (Callback callback : list)
                     callback.run(data);
             } catch (ClassCastException e) {
-                // Throwing this exception gives the client more information about the exception-
+                // Throwing CallbackDataCastException gives the client more information.
                 throw new CallbackDataCastException(event, e);
             }
         }
@@ -264,7 +264,15 @@ public class Emitter {
         return on(event, new Callback<T>() {
             @Override
             public void run(final T data) {
-                callback.run(data);
+                try {
+                    // There is an unchecked conversion from raw type Callback to type Callback<T> but that's good since
+                    // the client is requested to give the same type for emit() and on() (or once()) methods.
+                    callback.run(data);
+                } catch (ClassCastException e) {
+                    // Throwing CallbackDataCastException gives the client more information.
+                    throw new CallbackDataCastException(event, e);
+                }
+
                 off(event, this);
             }
         });
