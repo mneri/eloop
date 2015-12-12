@@ -33,12 +33,12 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 @SuppressWarnings("unused")
 public abstract class Loop {
-    static final class Event<T> {
-        public final T data;
+    static final class Event {
+        public final Object data;
         public final Emitter emitter;
         public final String name;
 
-        Event(Emitter emitter, String name, T data) {
+        Event(Emitter emitter, String name, Object data) {
             this.emitter = emitter;
             this.name = name;
             this.data = data;
@@ -76,6 +76,9 @@ public abstract class Loop {
      * @return A new {@link Emitter} bound to this {@link Loop}.
      */
     protected Emitter emitter() {
+        if (!mStarted)
+            throw new IllegalLoopStateException();
+
         return new Emitter(this);
     }
 
@@ -90,7 +93,10 @@ public abstract class Loop {
      *
      * @param event The event to enqueue in the event queue.
      */
-    <T> void enqueue(Event<T> event) {
+    void enqueue(Event event) {
+        if (!mRunning)
+            throw new IllegalLoopStateException();
+
         // The event queue is thread safe: multiple threads can add and retrieve its elements. Usually, events are
         // put in the queue by background threads and are taken by the event loop thread.
         mEventQueue.add(event);
