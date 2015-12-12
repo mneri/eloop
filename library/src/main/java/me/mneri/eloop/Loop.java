@@ -47,6 +47,7 @@ public abstract class Loop {
 
     private final BlockingQueue<Event> mEventQueue = new LinkedBlockingQueue<>(); // The queue of events.
     private volatile boolean mRunning; // true if the loop is running.
+    private boolean mStarted; // true if the loop has already been started.
     private final Thread mThread = new Thread(new Runnable() { // This is the event loop thread.
         @Override
         public void run() {
@@ -110,6 +111,11 @@ public abstract class Loop {
      * <i>This method is not thread safe and should not be invoked from other threads.</i>
      */
     public void quit() {
+        if (!mStarted || !mRunning)
+            throw new IllegalLoopStateException();
+
+        // Here we do not set mStarted to false. If the client need to start the loop again, he should create a new
+        // instance.
         mRunning = false;
     }
 
@@ -121,9 +127,13 @@ public abstract class Loop {
 
     /**
      * Start the event loop. Upon starting the method {@link Loop#run()} is invoked and executed on the event
-     * loop thread.
+     * loop thread. A {@link Loop} can be started only once.
      */
     public void start() {
+        if (mStarted)
+            throw new IllegalLoopStateException();
+
+        mStarted = true;
         mRunning = true;
         mThread.start();
     }
