@@ -29,7 +29,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * executed on the event loop thread.
  *
  * @author Massimo Neri
- * @version 1.0
+ * @version 2.0
  */
 @SuppressWarnings("unused")
 public abstract class Loop {

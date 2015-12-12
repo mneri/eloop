@@ -34,7 +34,7 @@ import java.util.List;
  * The API of {@code Loop} is finely tailored with the API of {@link Emitter}.
  *
  * @author Massimo Neri
- * @version 1.0
+ * @version 2.0
  */
 @SuppressWarnings("unused")
 public class Emitter {
@@ -142,7 +142,7 @@ public class Emitter {
      * @param data  The data to supply to the callbacks.
      */
     public <T> void emit(String event, T data) {
-        mLoop.enqueue(new Event<T>(this, event, data));
+        mLoop.enqueue(new Event<>(this, event, data));
     }
 
     /**

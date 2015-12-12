@@ -22,7 +22,7 @@ package me.mneri.eloop;
  * the {@link Loop#start()} and  {@link Loop#quit()} methods.
  *
  * @author Massimo Neri
- * @version 1.0
+ * @version 2.0
  */
 public class IllegalLoopStateException extends RuntimeException {
 }

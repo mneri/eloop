@@ -25,7 +25,7 @@ package me.mneri.eloop;
  *            {@link Callback#run} method.
  *
  * @author Massimo Neri
- * @version 1.0
+ * @version 2.0
  */
 public interface Callback<T> {
     /**

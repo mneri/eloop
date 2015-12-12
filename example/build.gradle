@@ -15,7 +15,7 @@
  * along with eloop. If not, see <http://www.gnu.org/licenses/>.
  */
 
-version '1.0-SNAPSHOT'
+version '2.0-SNAPSHOT'
 
 apply plugin: 'java'
 

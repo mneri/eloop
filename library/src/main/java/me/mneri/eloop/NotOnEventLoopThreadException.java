@@ -21,7 +21,7 @@ package me.mneri.eloop;
  * This exception is thrown when a method restricted to the event loop thread is invoked from another thread.
  *
  * @author Massimo Neri
- * @version 1.0
+ * @version 2.0
  */
 public class NotOnEventLoopThreadException extends RuntimeException {
     /**

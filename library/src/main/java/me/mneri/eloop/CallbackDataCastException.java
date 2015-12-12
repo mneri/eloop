@@ -22,7 +22,7 @@ package me.mneri.eloop;
  * later invoked with {@code data} parameter of different type.
  *
  * @author Massimo Neri
- * @version 1.0
+ * @version 2.0
  */
 public class CallbackDataCastException extends RuntimeException {
     /**

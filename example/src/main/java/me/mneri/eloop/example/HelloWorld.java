@@ -24,7 +24,7 @@ import me.mneri.eloop.Loop;
  * Example class implementing an event loop.
  *
  * @author Massimo Neri
- * @version 1.0
+ * @version 2.0
  */
 public class HelloWorld extends Loop {
     /**
