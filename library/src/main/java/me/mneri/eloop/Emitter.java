@@ -210,9 +210,9 @@ public class Emitter {
 
         // Wrap the callback in another callback. The wrapping callback takes care to remove itself after it gets
         // invoked for the first time.
-        return on(event, new Callback<T>() {
+        return on(event, new Callback() {
             @Override
-            public void run(T data) {
+            public void run(Object data) {
                 runCallback(callback, event, data);
                 off(event, this);
             }
